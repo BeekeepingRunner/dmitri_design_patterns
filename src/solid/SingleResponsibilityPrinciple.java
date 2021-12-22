@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleResponsibilityPattern {
+public class SingleResponsibilityPrinciple {
 
     public static void main(String[] args) throws Exception {
         Journal j = new Journal();
