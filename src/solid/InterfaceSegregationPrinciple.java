@@ -49,3 +49,49 @@ class OldFashionedPrinter implements Machine {
         // YAGNI
     }
 }
+
+interface Printer {
+
+    void print(Document d);
+}
+
+interface Scanner {
+
+    void scan(Document d);
+}
+
+class JustAPrinter implements Printer {
+    @Override
+    public void print(Document d) {
+        // ...
+    }
+}
+
+class Photocopier implements Printer, Scanner {
+
+    @Override
+    public void print(Document d) {
+        // ...
+    }
+
+    @Override
+    public void scan(Document d) {
+        // ...
+    }
+}
+
+// Different way to implement for example a Photocopier
+interface MultifunctionDevice extends Printer, Scanner {}
+
+class MultifunctionMachine implements MultifunctionDevice {
+
+    @Override
+    public void print(Document d) {
+        // ...
+    }
+
+    @Override
+    public void scan(Document d) {
+        // ...
+    }
+}
