@@ -85,13 +85,23 @@ interface MultifunctionDevice extends Printer, Scanner {}
 
 class MultifunctionMachine implements MultifunctionDevice {
 
+    // Decorator design pattern
+    //
+    private Printer printer;
+    private Scanner scanner;
+
+    public MultifunctionMachine(Printer printer, Scanner scanner) {
+        this.printer = printer;
+        this.scanner = scanner;
+    }
+
     @Override
     public void print(Document d) {
-        // ...
+        printer.print(d);
     }
 
     @Override
     public void scan(Document d) {
-        // ...
+        scanner.scan(d);
     }
 }
