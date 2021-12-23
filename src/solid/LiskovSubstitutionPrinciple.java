@@ -14,9 +14,12 @@ public class LiskovSubstitutionPrinciple {
         Rectangle rc = new Rectangle(2, 3);
         useIt(rc);
 
-        Rectangle sq = new Square();
+        Rectangle sq = new BadSquare();
         sq.setWidth(5);
         useIt(sq);
+
+        Rectangle correctSquare = RectangleFactory.newSquare(5);
+        useIt(correctSquare);
     }
 }
 
@@ -59,14 +62,18 @@ class Rectangle {
                 ", height=" + height +
                 '}';
     }
+
+    public boolean isSquare() {
+        return width == height;
+    }
 }
 
-class Square extends Rectangle {
+class BadSquare extends Rectangle {
 
-    public Square() {
+    public BadSquare() {
     }
 
-    public Square(int size) {
+    public BadSquare(int size) {
         width = height = size;
     }
 
@@ -80,5 +87,16 @@ class Square extends Rectangle {
     public void setHeight(int height) {
         super.setHeight(height);
         super.setWidth(height);
+    }
+}
+
+class RectangleFactory {
+
+    public static Rectangle newRectangle(int width, int height) {
+        return new Rectangle(width, height);
+    }
+
+    public static Rectangle newSquare(int side) {
+        return new Rectangle(side, side);
     }
 }
