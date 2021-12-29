@@ -2,6 +2,8 @@ package solid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.javatuples.Triplet;
 
@@ -37,8 +39,13 @@ class Person {
     }
 }
 
+interface RelationshipBrowser {
+
+    List<Person> findAllChildrenOf(String name);
+}
+
 // low-level module
-class Relationships {
+class Relationships implements RelationshipBrowser {
 
     private List<Triplet<Person, Relationship, Person>> relations
             = new ArrayList<>();
@@ -51,18 +58,24 @@ class Relationships {
         relations.add(new Triplet<>(parent, Relationship.PARENT, child));
         relations.add(new Triplet<>(child, Relationship.CHILD, parent));
     }
+
+    @Override
+    public List<Person> findAllChildrenOf(String name) {
+        return relations.stream()
+                .filter(relation -> Objects.equals(relation.getValue0().name, name)
+                && relation.getValue1() == Relationship.PARENT)
+                .map(Triplet::getValue2)
+                .collect(Collectors.toList());
+    }
 }
 
 // high-level module
 class Research {
 
-    public Research(Relationships relationships) {
-        List<Triplet<Person, Relationship, Person>> relations = relationships.getRelations();
-        relations.stream()
-                .filter(relation -> relation.getValue0().name.equals("John")
-                && relation.getValue1() == Relationship.PARENT)
-                .forEach(relation -> System.out.println(
-                        "John has a child called " + relation.getValue2().name
-                ));
+    public Research(RelationshipBrowser browser) {
+        List<Person> children = browser.findAllChildrenOf("John");
+        for (Person child : children) {
+            System.out.println("John has a child called " + child.name);
+        }
     }
 }
