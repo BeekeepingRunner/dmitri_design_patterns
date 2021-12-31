@@ -1,4 +1,4 @@
-package patterns.creational.builder;
+package patterns.creational.builder.fluent;
 
 public class FluentBuilder {
 
