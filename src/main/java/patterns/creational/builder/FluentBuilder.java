@@ -7,8 +7,10 @@ public class FluentBuilder {
         EmployeeBuilder pb = new EmployeeBuilder();
         Person bartek = pb
                 .withName("Bartek")
-                // .worksAt() withName returns PersonBuilder so it doesn't work :(
+                .worksAt("Google")
                 .build();
+
+        System.out.println(bartek);
     }
 }
 
@@ -26,13 +28,17 @@ class Person {
     }
 }
 
-class PersonBuilder {
+class PersonBuilder<SELF extends PersonBuilder<SELF>> {
 
     protected Person person = new Person();
 
-    public PersonBuilder withName(String name) {
+    protected SELF self() {
+        return (SELF) this;
+    }
+
+    public SELF withName(String name) {
         person.name = name;
-        return this;
+        return self();
     }
 
     public Person build() {
@@ -40,7 +46,12 @@ class PersonBuilder {
     }
 }
 
-class EmployeeBuilder extends PersonBuilder {
+class EmployeeBuilder extends PersonBuilder<EmployeeBuilder> {
+
+    @Override
+    protected EmployeeBuilder self() {
+        return this;
+    }
 
     public EmployeeBuilder worksAt(String position) {
         person.position = position;
