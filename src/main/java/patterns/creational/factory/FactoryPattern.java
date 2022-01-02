@@ -1,6 +1,6 @@
 package patterns.creational.factory;
 
-public class FactoryMethodPattern {
+public class FactoryPattern {
 
     public static void main(String[] args) {
 
