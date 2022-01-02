@@ -1,4 +1,4 @@
-package patterns.creational.factory;
+package patterns.creational.factory.method;
 
 public class FactoryMethodPattern {
 
