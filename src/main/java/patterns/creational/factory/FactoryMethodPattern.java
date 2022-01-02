@@ -7,18 +7,32 @@ public class FactoryMethodPattern {
     }
 }
 
+enum CoordinateSystem {
+    CARTESIAN,
+    POLAR
+}
+
 class Point {
 
     private double x;
     private double y;
 
-    public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public Point(double rho, double theta) {
-        x = rho * Math.cos(theta);
-        y = rho * Math.sin(theta);
+    /**
+     *
+     * @param a i x if cartesian or rho if polar
+     * @param b ...
+     * @param cs ...
+     */
+    public Point(double a, double b, CoordinateSystem cs) {
+        switch (cs) {
+            case CARTESIAN -> {
+                this.x = x;
+                this.y = y;
+            }
+            case POLAR -> {
+                x = a * Math.cos(b);
+                y = a * Math.sin(b);
+            }
+        }
     }
 }
