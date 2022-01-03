@@ -38,6 +38,7 @@ class Coffee implements HotDrink {
     }
 }
 
+// abstract factory
 interface HotDrinkFactory {
 
     HotDrink prepare(int amount);
