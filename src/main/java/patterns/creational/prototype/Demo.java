@@ -9,7 +9,7 @@ public class Demo {
         Person john = new Person(new String[]{"John", "Smith"},
                 new Address("London Road", 123));
 
-        Person jane = john;
+        Person jane = john.clone();
         jane.names[0] = "Jane";
         jane.address.houseNumber = 124;
 
@@ -18,7 +18,7 @@ public class Demo {
     }
 }
 
-class Address {
+class Address implements Cloneable {
 
     public String streetName;
     public int houseNumber;
@@ -35,9 +35,14 @@ class Address {
                 ", houseNumber=" + houseNumber +
                 '}';
     }
+
+    @Override
+    public Address clone() {
+        return new Address(streetName, houseNumber);
+    }
 }
 
-class Person {
+class Person implements Cloneable {
 
     public String[] names;
     public Address address;
@@ -53,5 +58,10 @@ class Person {
                 "names=" + Arrays.toString(names) +
                 ", address=" + address +
                 '}';
+    }
+
+    @Override
+    public Person clone() {
+        return new Person(names.clone(), address.clone());
     }
 }
