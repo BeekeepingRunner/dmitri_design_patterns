@@ -67,4 +67,9 @@ class BasicSingleton implements Serializable {
     public void setValue(int value) {
         this.value = value;
     }
+
+    @Serial
+    protected Object readResolve() {
+        return INSTANCE;
+    }
 }
