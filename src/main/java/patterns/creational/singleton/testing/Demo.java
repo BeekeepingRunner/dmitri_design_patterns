@@ -23,12 +23,9 @@ class SingletonDatabase {
         System.out.println("initializing database");
 
         try {
-            File f = new File(
-                    SingletonDatabase.class.getProtectionDomain()
-                            .getCodeSource().getLocation().getPath()
-            );
+            File f = new File("capitals.txt");
 
-            Path fullPath = Paths.get(f.getPath(), "capitals.txt");
+            Path fullPath = Paths.get(f.getPath());
             List<String> lines = Files.readAllLines(fullPath);
 
             Iterables.partition(lines, 2)
