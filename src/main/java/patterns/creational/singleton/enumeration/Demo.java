@@ -10,7 +10,7 @@ public class Demo {
     public static void main(String[] args) throws Exception {
 
         final String filename = "myfile.bin";
-        
+
         EnumBasedSingleton singleton = EnumBasedSingleton.INSTANCE;
         singleton.setValue(111);
         saveToFile(singleton, filename);
