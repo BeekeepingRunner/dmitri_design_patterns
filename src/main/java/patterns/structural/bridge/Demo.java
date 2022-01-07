@@ -6,6 +6,12 @@ package patterns.structural.bridge;
 // VectorCircleRenderer, VectorSquareRenderer, RasterCircleRenderer..?
 // NO! :D
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import javax.inject.Inject;
+
 interface Renderer {
     void renderCircle(float radius);
 }
@@ -42,6 +48,7 @@ class Circle extends Shape {
 
     public float radius;
 
+    @Inject
     public Circle(Renderer renderer) {
         super(renderer);
     }
@@ -62,16 +69,25 @@ class Circle extends Shape {
     }
 }
 
+// Dependency injection configuration
+class ShapeModule extends AbstractModule {
+
+    @Override
+    protected void configure() {
+        bind(Renderer.class).to(VectorRenderer.class);
+    }
+}
+
 public class Demo {
 
     public static void main(String[] args) {
 
-        RasterRenderer raster = new RasterRenderer();
-        VectorRenderer vector = new VectorRenderer();
+        Injector injector = Guice.createInjector(new ShapeModule());
 
-        Circle circle = new Circle(vector, 5);
-        circle.draw();
-        circle.resize(2);
-        circle.draw();
+        Circle instance = injector.getInstance(Circle.class);
+        instance.radius = 3;
+        instance.draw();
+        instance.resize(2);
+        instance.draw();
     }
 }
