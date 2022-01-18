@@ -1,18 +1,21 @@
 package patterns.structural.decorator.dynamic;
 
+import java.util.function.Supplier;
+
 public class Demo {
 
     public static void main(String[] args) {
 
-        Circle circle = new Circle(10);
-        System.out.println(circle.info());
+        ColoredShape<Square> blueSquare = new ColoredShape<>(
+                () -> new Square(20),
+                "blue"
+        );
 
-        ColoredShape blueSquare = new ColoredShape(new Square(20), "Blue");
         System.out.println(blueSquare.info());
 
-        TransparentShape myCircle = new TransparentShape(
-                new ColoredShape(new Circle(5), "Green"), 50
-        );
+        TransparentShape<ColoredShape<Circle>> myCircle = new TransparentShape<>(() ->
+                new ColoredShape<>(() -> new Circle(5), "green"), 50);
+
         System.out.println(myCircle.info());
     }
 }
@@ -59,13 +62,13 @@ class Square implements Shape {
     }
 }
 
-class ColoredShape implements Shape {
+class ColoredShape<T extends Shape> implements Shape {
 
     private Shape shape;
     private String color;
 
-    public ColoredShape(Shape shape, String color) {
-        this.shape = shape;
+    public ColoredShape(Supplier<? extends T> constructor, String color) {
+        shape = constructor.get();
         this.color = color;
     }
 
@@ -75,18 +78,18 @@ class ColoredShape implements Shape {
     }
 }
 
-class TransparentShape implements Shape {
+class TransparentShape<T extends Shape> implements Shape {
 
     private Shape shape;
     private int transparency;
 
-    public TransparentShape(Shape shape, int transparency) {
-        this.shape = shape;
+    public TransparentShape(Supplier<? extends T> constructor, int transparency) {
+        shape = constructor.get();
         this.transparency = transparency;
     }
 
     @Override
     public String info() {
-        return shape.info() + " has " + transparency + "% transparency";
+        return shape.info() + " has the transparency of " + transparency + "%";
     }
 }
