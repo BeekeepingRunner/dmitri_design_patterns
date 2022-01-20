@@ -11,6 +11,9 @@ public class Demo {
         Console console = new Console(30, 20);
         console.addViewport(viewport);
         console.render();
+
+        Console console2 = Console.newConsole(30, 20);
+        console2.render();
     }
 }
 
@@ -63,6 +66,14 @@ class Console {
 
     public void addViewport(Viewport viewport) {
         viewports.add(viewport);
+    }
+
+    public static Console newConsole(int width, int height) {
+        Buffer buffer = new Buffer(width, height);
+        Viewport viewport = new Viewport(buffer, width, height, 0, 0);
+        Console console = new Console(width, height);
+        console.addViewport(viewport);
+        return console;
     }
 
     public void render() {
