@@ -17,7 +17,7 @@ public class OpenClosedPrinciple {
         pf.filterByColor(products, Color.GREEN)
                 .forEach(p -> System.out.println(" - " + p.name));
 
-        BetterFilter bf = new BetterFilter();
+        BetterProductFilter bf = new BetterProductFilter();
         System.out.println("Green products (new):");
         bf.filter(products, new ColorSpecification(Color.GREEN))
                 .forEach(p -> System.out.println(" - " + p.name));
@@ -120,7 +120,7 @@ class AndSpecification<T> implements Specification<T> {
     }
 }
 
-class BetterFilter implements Filter<Product> {
+class BetterProductFilter implements Filter<Product> {
 
     @Override
     public Stream<Product> filter(List<Product> items, Specification<Product> spec) {
