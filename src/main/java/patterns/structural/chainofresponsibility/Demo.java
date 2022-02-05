@@ -9,6 +9,8 @@ public class Demo {
 
         CreatureModifier root = new CreatureModifier(goblin);
 
+        root.add(new NoBonusesModifier(goblin));
+
         System.out.println("Let's double goblin's attack...");
         root.add(new DoubleAttackModifier(goblin));
 
@@ -91,5 +93,17 @@ class IncreaseDefenseModifier extends CreatureModifier
         System.out.println("Increasing " + creature.name + "'s defense");
         creature.defense += 3;
         super.handle();
+    }
+}
+
+class NoBonusesModifier extends CreatureModifier {
+
+    public NoBonusesModifier(Creature creature) {
+        super(creature);
+    }
+
+    @Override
+    public void handle() {
+        System.out.println("No bonuses for you!");
     }
 }
