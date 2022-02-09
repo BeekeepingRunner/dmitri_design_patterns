@@ -1,4 +1,4 @@
-package patterns.structural.chainofresponsibility.brokerchain;
+package patterns.behavioral.chainofresponsibility.brokerchain;
 
 // chain of responsibility + observer pattern + mediator pattern + memento
 

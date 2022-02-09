@@ -1,4 +1,4 @@
-package patterns.structural.chainofresponsibility.excercise;
+package patterns.behavioral.chainofresponsibility.excercise;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package patterns.structural.chainofresponsibility;
+package patterns.behavioral.chainofresponsibility;
 
 public class Demo {
 
