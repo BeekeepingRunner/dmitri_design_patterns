@@ -1,5 +1,7 @@
 package patterns.behavioral.command;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class BankAccount {
@@ -12,11 +14,13 @@ class BankAccount {
         System.out.println("Deposited " + amount + ", balance is now " + balance);
     }
 
-    public void withdraw(int amount) {
+    public boolean withdraw(int amount) {
         if (balance - amount >= overdraftLimit) {
             balance -= amount;
             System.out.println("Withdrew " + amount + ", balance is now " + balance);
-        }
+            return true;
+        } else
+            return false;
     }
 
     @Override
@@ -29,17 +33,35 @@ class BankAccount {
 
 interface Command {
     void call();
+    void undo();
 }
 
 class BankAccountCommand implements Command
 {
     private BankAccount account;
+    private boolean succeeded;
 
     @Override
     public void call() {
         switch (action) {
-            case DEPOSIT -> account.deposit(amount);
-            case WITHDRAW -> account.withdraw(amount);
+            case DEPOSIT -> {
+                account.deposit(amount);
+                succeeded = true;
+            }
+            case WITHDRAW -> {
+                succeeded = account.withdraw(amount);
+            }
+        }
+    }
+
+    @Override
+    public void undo() {
+        if (!succeeded)
+            return;
+
+        switch (action) {
+            case DEPOSIT -> account.withdraw(amount);
+            case WITHDRAW -> account.deposit(amount);
         }
     }
 
@@ -61,16 +83,22 @@ public class Demo {
 
     public static void main(String[] args) {
 
-        final BankAccount ba = new BankAccount();
+        BankAccount ba = new BankAccount();
         System.out.println(ba);
 
-        final List<BankAccountCommand> commands = List.of(
+        List<BankAccountCommand> commands = new ArrayList<>(List.of(
                 new BankAccountCommand(ba, BankAccountCommand.Action.DEPOSIT, 100),
                 new BankAccountCommand(ba, BankAccountCommand.Action.WITHDRAW, 1000)
-        );
+        ));
 
-        for (BankAccountCommand c : commands) {
+        for (Command c : commands) {
             c.call();
+            System.out.println(ba);
+        }
+
+        Collections.reverse(commands);
+        for (Command c : commands) {
+            c.undo();
             System.out.println(ba);
         }
     }
