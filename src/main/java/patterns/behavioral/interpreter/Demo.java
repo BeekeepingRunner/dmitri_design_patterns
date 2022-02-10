@@ -38,6 +38,54 @@ public class Demo {
         return result;
     }
 
+    static Element parse(List<Token> tokens) {
+
+        final BinaryOperation result = new BinaryOperation();
+        boolean haveLeftHandSide = false;
+
+        for (int i = 0; i < tokens.size(); ++i) {
+            Token token = tokens.get(i);
+            switch (token.type) {
+                case INTEGER -> {
+                    final Integer integer =
+                            new Integer(java.lang.Integer.parseInt(token.text));
+                    if (!haveLeftHandSide) {
+                        result.left = integer;
+                        haveLeftHandSide = true;
+                    } else {
+                        result.right = integer;
+                    }
+                }
+                case PLUS -> {
+                    result.type = BinaryOperation.Type.ADDITION;
+                }
+                case MINUS -> {
+                    result.type = BinaryOperation.Type.SUBTRACTION;
+                }
+                case LPARENTHESIS -> {
+                    int j = i;
+                    for (; j < tokens.size(); ++j) {
+                        if (tokens.get(j).type == Token.Type.RPARENTHESIS)
+                            break;
+                    }
+
+                    final List<Token> subexpression = tokens.stream()
+                            .skip(i + 1)
+                            .limit(j - i - 1)
+                            .collect(Collectors.toList());
+
+                    Element element = parse(subexpression);
+                    if (!haveLeftHandSide) {
+                        result.left = element;
+                        haveLeftHandSide = true;
+                    } else
+                        result.right = element;
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
 
         final String input = "(13+4)-(12+1)";
@@ -45,6 +93,9 @@ public class Demo {
         System.out.println(tokens.stream()
                 .map(Token::toString)
                 .collect(Collectors.joining("\t")));
+
+        Element parsed = parse(tokens);
+        System.out.println(input + " = " + parsed.eval());
     }
 }
 
@@ -70,5 +121,52 @@ class Token
     @Override
     public String toString() {
         return "`" + text + "`";
+    }
+}
+
+
+interface Element
+{
+    int eval();
+}
+
+class Integer implements Element
+{
+    private int value;
+
+    public Integer(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public int eval() {
+        return value;
+    }
+}
+
+class BinaryOperation implements Element
+{
+    public enum Type {
+        ADDITION,
+        SUBTRACTION
+    }
+
+    public Type type;
+    public Element left;
+    public Element right;
+
+    @Override
+    public int eval() {
+        switch (type) {
+            case ADDITION -> {
+                return left.eval() + right.eval();
+            }
+            case SUBTRACTION -> {
+                return left.eval() - right.eval();
+            }
+            default -> {
+                return 0;
+            }
+        }
     }
 }
